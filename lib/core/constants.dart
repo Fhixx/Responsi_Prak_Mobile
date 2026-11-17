@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppConst {
   static const String baseUrl = 'https://www.freetogame.com/api';
   static const String appName = 'Hydra Games';
-  static const String email = '70';
+  static const String email = '70'; // ada di sini untuk login email dan password
   static const String password = '123';
 }
 
