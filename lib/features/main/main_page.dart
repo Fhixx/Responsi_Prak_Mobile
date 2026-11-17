@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../favorite/favorite_page.dart';
 import '../home/home_page.dart';
+import '../library/library_page.dart';
 import '../profile/profile_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -13,7 +13,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _index = 0;
 
-  final _pages = const [HomePage(), FavoritePage(), ProfilePage()];
+  final _pages = const [HomePage(), LibraryPage(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage> {
         onTap: (i) => setState(() => _index = i),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'library'),
+          BottomNavigationBarItem(icon: Icon(Icons.check_circle), label: 'Library'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
       ),

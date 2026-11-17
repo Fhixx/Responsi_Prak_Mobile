@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../core/constants.dart';
-import '../../data/models/show_model.dart';
-import '../../data/services/game_service.dart';
-import 'widgets/show_card.dart';
+import '../../core/widgets/game_list_tile.dart';
+import '../../data/models/game_model.dart';
+import '../../data/services/api_service.dart';
+import '../detail/detail_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,8 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _service = TvMazeService();
-  List<ShowModel> _shows = [];
+  final _service = ApiService();
+  List<GameModel> _games = [];
   bool _loading = true;
   String? _error;
 
@@ -29,25 +30,32 @@ class _HomePageState extends State<HomePage> {
       _error = null;
     });
     try {
-      final data = await _service.fetchShows();
+      final data = await _service.fetchGames();
       if (!mounted) return;
       setState(() {
-        _shows = data;
+        _games = data;
         _loading = false;
       });
-    } catch (e) {
+    } catch (_) {
       if (!mounted) return;
       setState(() {
-        _error = e.toString().replaceFirst('Exception: ', '');
+        _error = 'Gagal memuat data game.\nPeriksa koneksi internet lalu coba lagi.';
         _loading = false;
       });
     }
   }
 
+  void _openDetail(GameModel game) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => DetailPage(gameId: game.id)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Browse Game')),
+      appBar: AppBar(title: const Text('Browse Games')),
       body: _buildBody(),
     );
   }
@@ -82,16 +90,18 @@ class _HomePageState extends State<HomePage> {
     return RefreshIndicator(
       color: AppColors.primary,
       onRefresh: _load,
-      child: GridView.builder(
+      child: ListView.separated(
         padding: const EdgeInsets.all(12),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 0.62,
-        ),
-        itemCount: _shows.length,
-        itemBuilder: (_, i) => ShowCard(show: _shows[i]),
+        itemCount: _games.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 8),
+        itemBuilder: (_, i) {
+          final game = _games[i];
+          return GameListTile(
+            game: game,
+            onTap: () => _openDetail(game),
+            trailing: const Icon(Icons.chevron_right, color: Colors.white38),
+          );
+        },
       ),
     );
   }

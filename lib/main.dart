@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'core/constants.dart';
+import 'data/services/library_service.dart';
+import 'data/services/session_service.dart';
 import 'features/auth/login_page.dart';
 import 'features/main/main_page.dart';
-import 'data/services/favorite_service.dart';
-import 'data/services/session_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FavoriteService.init();
-  final loggedIn = await SessionService.isLoggedIn();
-  runApp(MyApp(loggedIn: loggedIn));
+  await LibraryService.init(); // Hive: buka box library
+  final loggedIn = await SessionService.isLoggedIn(); // SharedPreferences: cek sesi
+  runApp(HydraApp(loggedIn: loggedIn));
 }
 
-class MyApp extends StatelessWidget {
+class HydraApp extends StatelessWidget {
   final bool loggedIn;
-  const MyApp({super.key, required this.loggedIn});
+  const HydraApp({super.key, required this.loggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: AppColors.bg,
           elevation: 0,
           scrolledUnderElevation: 0,
+          centerTitle: true,
           titleTextStyle: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,

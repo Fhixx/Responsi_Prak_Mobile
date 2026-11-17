@@ -11,30 +11,30 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _usernameCtrl = TextEditingController();
+  final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   bool _obscure = true;
   bool _loading = false;
 
   @override
   void dispose() {
-    _usernameCtrl.dispose();
+    _emailCtrl.dispose();
     _passwordCtrl.dispose();
     super.dispose();
   }
 
   Future<void> _login() async {
-    final username = _usernameCtrl.text.trim();
+    final email = _emailCtrl.text.trim();
     final password = _passwordCtrl.text;
 
-    if (username.isEmpty || password.isEmpty) {
-      _snack('Username dan password tidak boleh kosong');
+    if (email.isEmpty || password.isEmpty) {
+      _snack('email dan password tidak boleh kosong');
       return;
     }
 
     setState(() => _loading = true);
-    if (username == AppConst.nim && password == AppConst.password) {
-      await SessionService.saveSession(username);
+    if (email == AppConst.email && password == AppConst.password) {
+      await SessionService.saveSession(email);
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
       );
     } else {
       setState(() => _loading = false);
-      _snack('Username atau password salah');
+      _snack('email atau password salah');
     }
   }
 
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.movie, size: 64, color: AppColors.primary),
+                const Icon(Icons.gamepad, size: 64, color: AppColors.primary),
                 const SizedBox(height: 12),
                 const Text(
                   AppConst.appName,
@@ -70,11 +70,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 32),
                 TextField(
-                  controller: _usernameCtrl,
+                  controller: _emailCtrl,
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
-                    hintText: 'Username',
-                    prefixIcon: Icon(Icons.person, size: 20),
+                    hintText: 'email',
+                    prefixIcon: Icon(Icons.mail, size: 20),
                   ),
                 ),
                 const SizedBox(height: 12),
